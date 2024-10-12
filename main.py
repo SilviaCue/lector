@@ -1,19 +1,30 @@
-
-from fastapi import FastAPI, File, UploadFile  #gestionar los archivos subidos por el usuario.
+from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse
-from PIL import Image   #  PIL (a través de Pillow) para cargar y manipular imágenes.
-import pytesseract #biblioteca de Python que usa Tesseract OCR para extraer texto de las imágenes.
-import cv2  #para procesar las imágenes antes de pasarlas a Tesseract (convertir a escala de grises, binarización, 
-import numpy as np # NumPy para convertir las imágenes a matrices que OpenCV puede procesar.
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import Request
+import shutil  # Para guardar archivos cargados temporalmente
 
 app = FastAPI()
 
-@app.get("/")
-def read_route():
-    return {"Mensaje": "Prueba Ok"}
+# Montar archivos estáticos (CSS, imágenes, etc.)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Plantillas Jinja2
+templates = Jinja2Templates(directory="templates")
+
+# Endpoint para la página principal
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# Endpoint para procesar la imagen subida
+@app.post("/procesar-imagen/")
+async def procesar_imagen(file: UploadFile = File(...)):
+    # Guardar el archivo temporalmente
+    file_location = f"temp/{file.filename}"
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
 
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+    return {"info": f"Archivo '{file.filename}' subido con éxito."}

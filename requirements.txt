@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pytesseract
+pillow
+opencv-python-headless
+jinja2

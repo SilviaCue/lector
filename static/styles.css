@@ -1,0 +1,78 @@
+/* styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    width: 50%;
+    max-width: 600px; /* Limitar el ancho máximo */
+    margin: 5% auto; /* Centrar verticalmente con margen superior */
+    padding: 30px; /* Un poco menos de relleno para mejor ajuste en móviles */
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease; /* Animación suave cuando se cambia el tamaño */
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Añadir espacio entre los elementos */
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #555; /* Un color más suave para el label */
+}
+
+input[type="file"] {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px; /* Aumentar el tamaño de la fuente */
+    background-color: #f9f9f9;
+}
+
+input[type="file"]:hover {
+    background-color: #f1f1f1; /* Cambia el color al pasar el mouse */
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Transición suave al hover */
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%; /* Asegurar que se ajuste bien en pantallas pequeñas */
+        padding: 20px;
+    }
+
+    input[type="submit"] {
+        width: 100%; /* Hacer que el botón ocupe todo el ancho en pantallas pequeñas */
+    }
+}
