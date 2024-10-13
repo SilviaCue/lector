@@ -4,3 +4,4 @@ pytesseract
 pillow
 opencv-python-headless
 jinja2
+numpy 

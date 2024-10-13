@@ -3,6 +3,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import shutil  # Para guardar archivos cargados temporalmente
+import numpy as np
+import cv2
+from PIL import Image
+import pytesseract
 
 app = FastAPI()
 
@@ -17,14 +21,24 @@ templates = Jinja2Templates(directory="templates")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# Endpoint para procesar la imagen subida
+
+# Endpoint para procesar imágenes
 @app.post("/procesar-imagen/")
 async def procesar_imagen(file: UploadFile = File(...)):
-    # Guardar el archivo temporalmente
-    file_location = f"temp/{file.filename}"
-    with open(file_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
+        contents = await file.read()
+        nparr = np.frombuffer(contents, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
+        # Preprocesar la imagen
+        gris = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        _, img_proc = cv2.threshold(gris, 150, 255, cv2.THRESH_BINARY)
 
+        # Realizar OCR
+        preprocessed_img = Image.fromarray(img_proc)
+        texto = pytesseract.image_to_string(preprocessed_img, lang='spa')
 
-    return {"info": f"Archivo '{file.filename}' subido con éxito."}
+        return {"texto_extraido": texto}
+
+    except Exception as e:
+        return {"error": str(e)}
